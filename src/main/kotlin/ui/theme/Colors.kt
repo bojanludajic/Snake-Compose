@@ -1,3 +1,5 @@
+package ui.theme
+
 import androidx.compose.ui.graphics.Color
 
 val DarkOliveGreen1 = Color(0xFF657B3F)

@@ -1,3 +1,5 @@
+package data
+
 import androidx.compose.runtime.*
 import kotlinx.coroutines.*
 import kotlin.random.Random
@@ -9,10 +11,10 @@ class SnakeManager() {
     var HEADY by mutableStateOf(7)
     var direction by mutableStateOf(3)
     val directions = arrayOf(
-        intArrayOf(0,-1), //W
-        intArrayOf(-1,0), //A
-        intArrayOf(0,1), //S
-        intArrayOf(1,0) //D
+        intArrayOf(0,-1),
+        intArrayOf(-1,0),
+        intArrayOf(0,1),
+        intArrayOf(1,0)
     )
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var job: Job? = null
@@ -40,7 +42,7 @@ class SnakeManager() {
         direction = 2
         job = scope.launch {
             while(true) {
-                delay(200)
+                delay(150)
                 HEADX = (snakeList.value.first().first + directions[direction][0] + 15) % 15;
                 HEADY = (snakeList.value.first().second + directions[direction][1] + 15) % 15;
                 if(snakeList.value.contains(Pair(HEADX,HEADY))) {
@@ -59,6 +61,16 @@ class SnakeManager() {
 
     fun decrementTimer() {
         resetTimer--
+    }
+
+    fun oppositeDirection(dir: Int): Int {
+        return when(dir) {
+            0 -> 2
+            1 -> 3
+            2 -> 0
+            3 -> 1
+            else -> throw IllegalArgumentException("Invalid direction!")
+        }
     }
 
 
