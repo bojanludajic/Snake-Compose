@@ -7,18 +7,18 @@ class SnakeManager() {
     var size by mutableStateOf(3)
     var HEADX by mutableStateOf(7)
     var HEADY by mutableStateOf(7)
-    var direction by mutableStateOf(0)
+    var direction by mutableStateOf(3)
     val directions = arrayOf(
-        intArrayOf(1,0),
-        intArrayOf(0,1),
-        intArrayOf(-1,0),
-        intArrayOf(0,-1)
+        intArrayOf(0,-1), //W
+        intArrayOf(-1,0), //A
+        intArrayOf(0,1), //S
+        intArrayOf(1,0) //D
     )
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var job: Job? = null
     var appleX by mutableStateOf(Random.nextInt(15))
     var appleY by mutableStateOf(Random.nextInt(15))
-    var snakeList = mutableStateOf(listOf(Pair(9,7),Pair(8,7),Pair(7,7)))
+    var snakeList = mutableStateOf(listOf(Pair(7,9),Pair(7,8),Pair(7,7)))
     var gameOver by mutableStateOf(false)
     var resetTimer by mutableStateOf(5)
 
@@ -34,16 +34,16 @@ class SnakeManager() {
         size = 3
         appleX = Random.nextInt(15)
         appleY = Random.nextInt(15)
-        snakeList.value = listOf(Pair(9,7),Pair(8,7),Pair(7,7))
+        snakeList.value = listOf(Pair(7,9),Pair(7,8),Pair(7,7))
         HEADX = 7
         HEADY = 7
-        direction = 0
+        direction = 2
         job = scope.launch {
             while(true) {
-                delay(300)
-                HEADX = (snakeList.value.first().second + directions[direction][1] + 15) % 15;
-                HEADY = (snakeList.value.first().first + directions[direction][0] + 15) % 15;
-                if(snakeList.value.contains(Pair(HEADY,HEADX))) {
+                delay(200)
+                HEADX = (snakeList.value.first().first + directions[direction][0] + 15) % 15;
+                HEADY = (snakeList.value.first().second + directions[direction][1] + 15) % 15;
+                if(snakeList.value.contains(Pair(HEADX,HEADY))) {
                     gameOver = true
                     stop()
                 }
@@ -52,7 +52,7 @@ class SnakeManager() {
                     appleX = Random.nextInt(15)
                     appleY = Random.nextInt(15)
                 }
-                snakeList.value = listOf(Pair(HEADY,HEADX)) + snakeList.value.take(size - 1)
+                snakeList.value = listOf(Pair(HEADX,HEADY)) + snakeList.value.take(size - 1)
             }
         }
     }
