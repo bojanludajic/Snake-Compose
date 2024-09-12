@@ -26,9 +26,9 @@ fun Game(
 
 ) {
     val snakeManager: SnakeManager = remember { SnakeManager() }
-    var focusRequester = remember { FocusRequester() }
+    val focusRequester = remember { FocusRequester() }
     var lastDirectionChange by remember { mutableStateOf(0L) }
-    val debounceDelay = 150L
+    val debounceDelay = 75L
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -76,15 +76,12 @@ fun Game(
                             .weight(1f)
                     ) {
                         for (boxIndex in 0 until 15) {
-                            val bgColor: Color
-                            when {
-                                snakeManager.snakeList.value.first().first == boxIndex && snakeManager.snakeList.value.first().second == rowIndex -> bgColor =
-                                    RoyalPurple
-                                snakeManager.snakeList.value.contains(Pair(boxIndex, rowIndex)) -> bgColor = DarkPurple
-                                boxIndex == snakeManager.appleX && rowIndex == snakeManager.appleY -> bgColor =
-                                    Color.Red
+                            val bgColor = when {
+                                snakeManager.snakeList.value.first().first == boxIndex && snakeManager.snakeList.value.first().second == rowIndex -> RoyalPurple
+                                snakeManager.snakeList.value.contains(Pair(boxIndex, rowIndex)) -> DarkPurple
+                                boxIndex == snakeManager.appleX && rowIndex == snakeManager.appleY -> Color.Red
 
-                                else -> bgColor = when {
+                                else -> when {
                                     (boxIndex + rowIndex) % 2 == 0 -> DarkOliveGreen2
                                     else -> DarkOliveGreen7
                                 }
