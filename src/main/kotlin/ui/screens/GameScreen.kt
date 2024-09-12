@@ -28,27 +28,26 @@ fun Game(
     val snakeManager: SnakeManager = remember { SnakeManager() }
     val focusRequester = remember { FocusRequester() }
     var lastDirectionChange by remember { mutableStateOf(0L) }
-    val debounceDelay = 75L
+    val debounceDelay = 150L
     Box(
         modifier = Modifier
             .fillMaxSize()
             .focusRequester(focusRequester)
-            .onKeyEvent {
+            .onKeyEvent { event ->
                 val currentTime = System.currentTimeMillis()
-                if(currentTime - lastDirectionChange > debounceDelay) {
-                    val newDirection = when {
-                        it.type == KeyEventType.KeyDown && it.key == Key.W -> 0
-                        it.type == KeyEventType.KeyDown && it.key == Key.A -> 1
-                        it.type == KeyEventType.KeyDown && it.key == Key.S -> 2
-                        it.type == KeyEventType.KeyDown && it.key == Key.D -> 3
+                if (currentTime - lastDirectionChange > debounceDelay) {
+                    val newDirection = when (event.key) {
+                        Key.W -> 0
+                        Key.A -> 1
+                        Key.S -> 2
+                        Key.D -> 3
                         else -> null
                     }
                     newDirection?.let { newDir ->
-                        if(snakeManager.direction != snakeManager.oppositeDirection(newDir)) {
+                        if (snakeManager.direction != snakeManager.oppositeDirection(newDir)) {
                             snakeManager.direction = newDir
                             lastDirectionChange = currentTime
                         }
-
                     }
                 }
                 true
