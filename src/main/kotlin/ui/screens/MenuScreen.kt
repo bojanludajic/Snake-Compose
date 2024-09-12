@@ -13,10 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import data.SnakeManager
+import data.repository.GameRepository
+import ui.navigation.NavigationGraph
 
 @Composable
 fun Menu(
-    onAccept: () -> Unit
+    snakeManager: SnakeManager,
+    gameRepository: GameRepository,
+    onNavigate: (String) -> Unit
 ) {
     var tfText by remember { mutableStateOf("") }
     val MAX_NAME_LENGTH = 20
@@ -60,7 +66,6 @@ fun Menu(
                     if (newValue.length <= MAX_NAME_LENGTH || newValue.length < tfText.length) {
                         tfText = newValue
                     }
-                    println(tfText)
                 },
                 modifier = Modifier
                     .background(Color.White),
@@ -70,14 +75,47 @@ fun Menu(
                     text = "Name:"
                 ) }
             )
-            Button(
-                onClick = { if(tfText != "") onAccept() }
+            Row(
+
             ) {
-                Text(
-                    text = "PLAY"
-                )
+                Button(
+                    onClick = { if (tfText != "")  {
+                        val allUsers = gameRepository.getUsers()
+                        val userByName = allUsers.find { it.name == tfText }
+                        val userId = if(userByName != null) {
+                            userByName.userId
+                        } else {
+                            gameRepository.insertUser(tfText)
+                            val updatedUsers = gameRepository.getUsers()
+                            val newUser = updatedUsers.find { it.name == tfText }
+                            newUser?.userId
+                        }
+                        if (userId != null) {
+                            snakeManager.currentPlayer = userId
+                            onNavigate("Game")
+                            snakeManager.startMoving()
+                        }
+                    }
+                              },
+                    modifier = Modifier
+                        .padding(5.dp)
+                ) {
+                    Text(
+                        text = "PLAY"
+                    )
+                }
+                Button(
+                    onClick = { onNavigate("Scores") },
+                    modifier = Modifier
+                        .padding(5.dp)
+                ) {
+                    Text(
+                        text = "TOP SCORES"
+                    )
+                }
             }
         }
 
     }
 }
+

@@ -23,9 +23,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 @Preview
 fun Game(
-
+    snakeManager: SnakeManager
 ) {
-    val snakeManager: SnakeManager = remember { SnakeManager() }
     val focusRequester = remember { FocusRequester() }
     var lastDirectionChange by remember { mutableStateOf(0L) }
     val debounceDelay = 150L

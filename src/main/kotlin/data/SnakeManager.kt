@@ -1,11 +1,14 @@
 package data
 
 import androidx.compose.runtime.*
+import data.repository.GameRepository
 import kotlinx.coroutines.*
+import ui.screens.Game
 import kotlin.random.Random
 
 class SnakeManager() {
 
+    val gameRepository by mutableStateOf(GameRepository())
     var size by mutableStateOf(3)
     var HEADX by mutableStateOf(7)
     var HEADY by mutableStateOf(7)
@@ -23,10 +26,7 @@ class SnakeManager() {
     var snakeList = mutableStateOf(listOf(Pair(7,9),Pair(7,8),Pair(7,7)))
     var gameOver by mutableStateOf(false)
     var resetTimer by mutableStateOf(5)
-
-    init {
-        startMoving()
-    }
+    var currentPlayer: Int by mutableStateOf(0)
 
     fun stop() {
         job?.cancel()
@@ -43,10 +43,12 @@ class SnakeManager() {
         job = scope.launch {
             while(true) {
                 delay(150)
+                println("playing")
                 HEADX = (snakeList.value.first().first + directions[direction][0] + 15) % 15;
                 HEADY = (snakeList.value.first().second + directions[direction][1] + 15) % 15;
                 if(snakeList.value.contains(Pair(HEADX,HEADY))) {
                     gameOver = true
+                    gameRepository.insertNewScore(currentPlayer,size - 2)
                     stop()
                 }
                 if(HEADX == appleX && HEADY == appleY) {
