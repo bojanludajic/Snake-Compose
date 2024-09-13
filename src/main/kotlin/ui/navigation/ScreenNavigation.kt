@@ -9,10 +9,11 @@ import ui.screens.Game
 import ui.screens.Menu
 import ui.screens.ScoresScreen
 
+@Suppress("FunctionName")
 @Composable
 fun NavigationGraph(
 ) {
-    var currentScreen = remember { mutableStateOf("Menu") }
+    val currentScreen = remember { mutableStateOf("Menu") }
     val snakeManager =  remember { SnakeManager() }
     val gameRepository = GameRepository()
 
@@ -24,8 +25,6 @@ fun NavigationGraph(
         "Game" -> Game(
             snakeManager,
         )
-        "Scores" -> ScoresScreen(
-            snakeManager
-        ) { currentScreen.value = it }
+        "Scores" -> ScoresScreen { currentScreen.value = it }
     }
 }

@@ -1,7 +1,5 @@
 package ui.screens
 
-import ui.theme.DarkOliveGreen2
-import ui.theme.DarkOliveGreen7
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -16,8 +14,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import data.SnakeManager
 import data.repository.GameRepository
-import ui.navigation.NavigationGraph
+import ui.items.Background
 
+@Suppress("FunctionName")
 @Composable
 fun Menu(
     snakeManager: SnakeManager,
@@ -31,29 +30,7 @@ fun Menu(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            for(rowIndex in 1 until 25) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    for(boxIndex in 1 until 25) {
-                        val bgColor = if((rowIndex + boxIndex) % 2 == 0) DarkOliveGreen2 else DarkOliveGreen7
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .background(bgColor)
-                                .fillMaxHeight()
-                        ) {
-                        }
-                    }
-                }
-            }
-        }
+        Background()
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
