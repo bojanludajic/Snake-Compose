@@ -6,7 +6,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 
 class GameRepository {
-    val url = "jdbc:mysql://localhost:3306/sys"
+    val url = "jdbc:mysql://localhost:3306/user-score"
     val user = "root"
     val password = "bnbn1616"
 
@@ -15,7 +15,7 @@ class GameRepository {
         DriverManager.getConnection(url, user, password).use { connection ->
             connection.createStatement().use {statement ->
                 val query = "SELECT u.iduser, u.name, g.idgame, g.score " +
-                        "FROM `user-score`.user u JOIN `user-score`.game g ON u.iduser = g.iduser"
+                        "FROM user u JOIN game g ON u.iduser = g.iduser"
                 val resultSet: ResultSet = statement.executeQuery(query)
 
                 while(resultSet.next()) {
@@ -34,7 +34,7 @@ class GameRepository {
         val userDataList = mutableListOf<UserData>()
         DriverManager.getConnection(url, user, password).use { connection ->
             connection.createStatement().use { statement ->
-                val query = "SELECT * FROM `user-score`.user"
+                val query = "SELECT * FROM user"
                 val resultSet: ResultSet = statement.executeQuery(query)
 
                 while(resultSet.next()) {
@@ -49,7 +49,7 @@ class GameRepository {
 
     fun insertNewScore(userId: Int, score: Int) {
         DriverManager.getConnection(url, user, password).use {connection ->
-            val query = "INSERT INTO `user-score`.game(iduser,score) " +
+            val query = "INSERT INTO game(iduser,score) " +
                     "VALUES(?,?)"
             connection.prepareStatement(query).use { preparedStatement ->
                 preparedStatement.setInt(1,userId)
@@ -62,12 +62,8 @@ class GameRepository {
     }
 
     fun insertUser(name: String) {
-        val url = "jdbc:mysql://localhost:3306/sys"
-        val user = "root"
-        val password = "bnbn1616"
-
         DriverManager.getConnection(url, user, password).use {connection ->
-            val query = "INSERT INTO `user-score`.user(name) VALUES(?)"
+            val query = "INSERT INTO user(name) VALUES(?)"
 
             connection.prepareStatement(query).use { preparedStatement ->
                 preparedStatement.setString(1, name)
