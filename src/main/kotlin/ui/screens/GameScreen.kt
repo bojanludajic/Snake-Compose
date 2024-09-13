@@ -67,13 +67,13 @@ fun Game(
                     .fillMaxWidth()
                     .weight(5f)
             ) {
-                for (rowIndex in 0 until 15) {
+                for (rowIndex in 0 until 25) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                     ) {
-                        for (boxIndex in 0 until 15) {
+                        for (boxIndex in 0 until 25) {
                             val bgColor = when {
                                 snakeManager.snakeList.value.first().first == boxIndex && snakeManager.snakeList.value.first().second == rowIndex -> RoyalPurple
                                 snakeManager.snakeList.value.contains(Pair(boxIndex, rowIndex)) -> DarkPurple

@@ -18,7 +18,6 @@ fun main() = application {
         title = "Snake",
         onCloseRequest = ::exitApplication
     ) {
-        NavigationGraph(
-        )
+        NavigationGraph()
     }
 }

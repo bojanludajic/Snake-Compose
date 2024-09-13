@@ -41,13 +41,13 @@ fun ScoresScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            for (rowIndex in 1 until 15) {
+            for (rowIndex in 1 until 25) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    for (boxIndex in 1 until 15) {
+                    for (boxIndex in 1 until 25) {
                         val bgColor = if ((rowIndex + boxIndex) % 2 == 0) DarkOliveGreen2 else DarkOliveGreen7
                         Box(
                             modifier = Modifier
