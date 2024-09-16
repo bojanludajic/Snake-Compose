@@ -2,9 +2,7 @@ package ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,18 +23,41 @@ fun Menu(
 ) {
     var tfText by remember { mutableStateOf("") }
     val MAX_NAME_LENGTH = 20
+    var checked by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Background()
+        Background(
+            snakeManager
+        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            Row(
+                modifier = Modifier
+                    .width(230.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Turn background on/off",
+                    color = Color.White,
+                    modifier = Modifier
+                        .weight(1f)
+                )
+                Switch(
+                    checked = checked,
+                    onCheckedChange = {
+                        snakeManager.toggleBg()
+                        checked = !checked
+                    }
+                )
+            }
+
             TextField(
                 value = tfText,
                 onValueChange = { newValue ->

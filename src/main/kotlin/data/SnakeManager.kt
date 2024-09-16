@@ -20,12 +20,17 @@ class SnakeManager() {
     )
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var job: Job? = null
-    var appleX by mutableStateOf(Random.nextInt(30))
-    var appleY by mutableStateOf(Random.nextInt(30))
+    var appleX by mutableStateOf(Random.nextInt(15))
+    var appleY by mutableStateOf(Random.nextInt(15))
     var snakeList = mutableStateOf(listOf(Pair(7,9),Pair(7,8),Pair(7,7)))
     var gameOver by mutableStateOf(false)
     var resetTimer by mutableStateOf(5)
     var currentPlayer: Int by mutableStateOf(0)
+    var backGround by mutableStateOf(0)
+
+    fun toggleBg() {
+        backGround = (backGround + 1) % 2
+    }
 
     fun stop() {
         job?.cancel()
@@ -34,7 +39,7 @@ class SnakeManager() {
     fun startMoving() {
         size = 3
         appleX = Random.nextInt(25)
-        appleY = Random.nextInt(25)
+        appleY = Random.nextInt(16)
         snakeList.value = listOf(Pair(7,9),Pair(7,8),Pair(7,7))
         HEADX = 7
         HEADY = 7
@@ -43,7 +48,7 @@ class SnakeManager() {
             while(true) {
                 delay(150)
                 HEADX = (snakeList.value.first().first + directions[direction][0] + 25) % 25;
-                HEADY = (snakeList.value.first().second + directions[direction][1] + 25) % 25;
+                HEADY = (snakeList.value.first().second + directions[direction][1] + 16) % 16;
                 if(snakeList.value.contains(Pair(HEADX,HEADY))) {
                     gameOver = true
                     gameRepository.insertNewScore(currentPlayer,size - 2)
@@ -52,10 +57,10 @@ class SnakeManager() {
                 if(HEADX == appleX && HEADY == appleY) {
                     size++;
                     appleX = Random.nextInt(25)
-                    appleY = Random.nextInt(25)
+                    appleY = Random.nextInt(16)
                     while(snakeList.value.find { it == Pair(appleX,appleY) } == Pair(appleX,appleY) ) {
                         appleX = Random.nextInt(25)
-                        appleY = Random.nextInt(25)
+                        appleY = Random.nextInt(16)
                     }
 
                 }

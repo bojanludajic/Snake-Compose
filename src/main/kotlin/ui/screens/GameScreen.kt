@@ -6,9 +6,13 @@ import ui.theme.DarkPurple
 import ui.theme.RoyalPurple
 import data.SnakeManager
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -16,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -28,7 +34,9 @@ fun Game(
     val focusRequester = remember { FocusRequester() }
     var lastDirectionChange by remember { mutableStateOf(0L) }
     val debounceDelay = 150L
-    Box(
+
+
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .focusRequester(focusRequester)
@@ -56,6 +64,9 @@ fun Game(
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
+
+        val maxH = maxHeight / 23 * 1.01f
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -64,33 +75,51 @@ fun Game(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(5f)
+                    .fillMaxSize()
             ) {
-                for (rowIndex in 0 until 25) {
+                for (rowIndex in 0 until 16) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                     ) {
                         for (boxIndex in 0 until 25) {
-                            val bgColor = when {
-                                snakeManager.snakeList.value.first().first == boxIndex && snakeManager.snakeList.value.first().second == rowIndex -> RoyalPurple
-                                snakeManager.snakeList.value.contains(Pair(boxIndex, rowIndex)) -> DarkPurple
-                                boxIndex == snakeManager.appleX && rowIndex == snakeManager.appleY -> Color.Red
-
-                                else -> when {
-                                    (boxIndex + rowIndex) % 2 == 0 -> DarkOliveGreen2
-                                    else -> DarkOliveGreen7
-                                }
-                            }
+                            val bgColor = if ((boxIndex + rowIndex) % 2 == 0) DarkOliveGreen2 else DarkOliveGreen7
+                            val bgColors = listOf(bgColor, Color.Black)
                             Box(
                                 modifier = Modifier
-                                    .background(bgColor)
+                                    .background(bgColors[snakeManager.backGround])
                                     .weight(1f)
-                                    .fillMaxHeight()
                             ) {
-                                Text("")
+                                Canvas(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                ) {
+                                    val radius = size.minDimension / 2f
+                                    when {
+                                        snakeManager.snakeList.value.first().first == boxIndex && snakeManager.snakeList.value.first().second == rowIndex ->
+                                            drawCircle(
+                                                color = RoyalPurple,
+                                                radius = radius,
+                                            )
+
+                                        snakeManager.snakeList.value.contains(Pair(boxIndex, rowIndex)) -> {
+                                            drawCircle(
+                                                color = DarkPurple,
+                                                radius = radius,
+                                            )
+                                        }
+
+                                        boxIndex == snakeManager.appleX && rowIndex == snakeManager.appleY -> {
+                                            drawCircle(
+                                                color = Color.Red,
+                                                radius = radius,
+                                            )
+                                        }
+
+                                        else -> Unit
+                                    }
+                                }
                             }
                         }
                     }

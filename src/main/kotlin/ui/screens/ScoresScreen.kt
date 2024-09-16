@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import data.SnakeManager
 import data.model.GameData
 import data.repository.GameRepository
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +19,8 @@ import ui.items.Background
 
 @Composable
 fun ScoresScreen(
- onNavigate: (String) -> Unit
+    snakeManager: SnakeManager,
+    onNavigate: (String) -> Unit
 ) {
     val gameRepository: GameRepository = GameRepository()
     var gameDataList = gameRepository.getGames()
@@ -26,7 +28,9 @@ fun ScoresScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Background()
+        Background(
+            snakeManager
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize(),

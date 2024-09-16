@@ -25,6 +25,8 @@ fun NavigationGraph(
         "Game" -> Game(
             snakeManager,
         )
-        "Scores" -> ScoresScreen { currentScreen.value = it }
+        "Scores" -> ScoresScreen(
+            snakeManager
+        ) { currentScreen.value = it }
     }
 }
